@@ -1,7 +1,8 @@
 import os
 import sys
 
-from base.models.hashObject import HashObject
+from base.models.blobObject import BlobObject
+from base.models.hashObjectSerializer import HashObjectSerializer
 
 GET_DIR = ".pygit"
 OBJECT_DB_PATH = f"{GET_DIR}/objects"
@@ -10,19 +11,24 @@ OBJECT_DB_PATH = f"{GET_DIR}/objects"
 class DataController:
     def __init__(self):
         self.INIT_DIR = ".pygit"
+        self.obj_serializer = HashObjectSerializer(OBJECT_DB_PATH)
 
     def init(self):
         os.makedirs(GET_DIR)
         os.makedirs(f"{OBJECT_DB_PATH}")
         self.object_db = f"{OBJECT_DB_PATH}"
 
-    def save(self, data) -> str:
-        obj = HashObject(data, OBJECT_DB_PATH)
-        obj.write()
+    def save(self, data: bytes) -> str:
+        obj = BlobObject(data, OBJECT_DB_PATH)
+        obj.deserialize()
         return obj.oid
 
-    def load(self, oid) -> HashObject:
-        obj = HashObject.read(oid, OBJECT_DB_PATH)
+    def load(self, oid: str, _type=None) -> BlobObject:
+        obj = (
+            self.obj_serializer.serialize(oid, _type)
+            if _type is not None
+            else self.obj_serializer.serialize(oid)
+        )
         # might need a flush here if there's ordering issues
         print(obj)
         # sys.stdout.buffer.write(obj.__str__())

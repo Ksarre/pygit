@@ -40,7 +40,6 @@ class CLIParser:
 
         return parser.parse_args()
 
-    # TODO: use command pattern with strategy instead of hardcoding specific commands
     # TODO: error handle when repo already initialized
     def init(self, args):
         self.dataController.init()
