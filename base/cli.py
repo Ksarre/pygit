@@ -1,6 +1,7 @@
 import argparse
 
 from base.controllers.dataController import DataController
+from base.objectTree import ObjectTree
 
 
 def main():
@@ -38,6 +39,10 @@ class CLIParser:
         hash_object_parser.set_defaults(func=self.cat_object)
         hash_object_parser.add_argument("oid")
 
+        # write directory command
+        write_tree_parser = commands.add_parser("write-tree")
+        write_tree_parser.set_defaults(func=self.write_tree)
+
         return parser.parse_args()
 
     # TODO: error handle when repo already initialized
@@ -51,3 +56,6 @@ class CLIParser:
 
     def cat_object(self, args):
         self.dataController.load(args.oid)
+
+    def write_tree(self, args):
+        ObjectTree.write_tree()

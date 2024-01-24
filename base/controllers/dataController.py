@@ -2,7 +2,7 @@ import os
 import sys
 
 from base.models.blobObject import BlobObject
-from base.models.hashObjectSerializer import HashObjectSerializer
+from base.data.hashObjectSerializer import HashObjectSerializer
 
 GET_DIR = ".pygit"
 OBJECT_DB_PATH = f"{GET_DIR}/objects"
